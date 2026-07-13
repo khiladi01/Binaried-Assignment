@@ -1,0 +1,52 @@
+<div class="page">
+  <header class="topbar">
+    <h1>Task Manager</h1>
+    <div class="topbar-right">
+      <span>Hi, {{ userName }}</span>
+      <button class="btn btn-secondary" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <form class="task-form" (ngSubmit)="submitTask()">
+      <h2>{{ editingId ? 'Edit Task' : 'Add New Task' }}</h2>
+
+      <input type="text" [(ngModel)]="formTitle" name="title" placeholder="Task title" />
+      <textarea [(ngModel)]="formDescription" name="description" rows="2" placeholder="Description (optional)"></textarea>
+
+      <select [(ngModel)]="formStatus" name="status">
+        <option value="pending">Pending</option>
+        <option value="in-progress">In Progress</option>
+        <option value="completed">Completed</option>
+      </select>
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+          {{ editingId ? 'Update Task' : 'Add Task' }}
+        </button>
+        <button class="btn btn-secondary" type="button" *ngIf="editingId" (click)="resetForm()">
+          Cancel
+        </button>
+      </div>
+    </form>
+
+    <div class="task-list">
+      <p *ngIf="loading">Loading tasks...</p>
+      <p *ngIf="!loading && tasks.length === 0">No tasks yet. Add one above!</p>
+
+      <div class="task-card" *ngFor="let task of tasks">
+        <div class="task-info">
+          <h3>{{ task.title }}</h3>
+          <p *ngIf="task.description">{{ task.description }}</p>
+          <span class="badge" [class]="task.status">{{ task.status }}</span>
+        </div>
+        <div class="task-actions">
+          <button class="btn btn-secondary" (click)="editTask(task)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteTask(task._id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
