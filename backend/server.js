@@ -1,16 +1,16 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
+import 'dotenv/config';   // must be the very first import
+import express, { json } from 'express';
+import cors from 'cors';
+import { connect } from 'mongoose';
 
-const authRoutes = require('./routes/auth');
-const taskRoutes = require('./routes/tasks');
+import authRoutes from './routes/auth.js';
+import taskRoutes from './routes/tasks.js';
 
 const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(json());
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -24,8 +24,7 @@ app.get('/api/health', (req, res) => {
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-mongoose
-  .connect(MONGO_URI)
+connect(MONGO_URI)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
